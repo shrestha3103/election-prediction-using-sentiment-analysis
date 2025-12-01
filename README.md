@@ -1,219 +1,114 @@
-# 🗳️ Election Prediction Using Sentiment Analysis
+# 🗳️ Electoral Result Prediction System
 ### Predicting Electoral Trends Using Twitter Data featuring ReactJS, Machine Learning & Statistical Analysis
-## 🚀 Overview
+This project is a computational intelligence tool designed to predict electoral results by **analyzing tweet volume** and **performing sentiment analysis** on political discourse.<br>
+It allows users to upload their own datasets (CSV) to generate real-time insights, regression models, and visualizations.
 
-This project predicts election outcomes or political trends by analyzing public sentiment expressed on Twitter. By collecting tweets, processing them, running sentiment analysis, and aggregating the sentiment over time for political entities (parties/candidates), the system estimates public mood and attempts to forecast results.
+## 📖 About the Project
+Traditional exit polls rely on sample surveys, which can be expensive and time-consuming. This project proposes a Big Data approach to psephology (the study of elections). By leveraging Twitter data, we analyze the sentiment polarity (positive vs. negative) and the sheer volume of discussions regarding political parties to forecast election results.<br>
+**The system tests the hypothesis that higher sentiment scores and tweet volumes correlate positively with vote share and seat share.**
 
-## 📌 Key Objectives
+## 🚀 Live Demo
+Check out the live application:  [Electoral Result Prediction Using Social Media Analysis](https://electoral-result-prediction.netlify.app/)
 
-- Collect election-related tweets using keywords, hashtags, party names, and candidate names.
-
-- Clean and preprocess the raw tweet text.
-
-- Classify sentiment (Positive, Negative, Neutral).
-
-- Aggregate sentiment to form trend signals.
-
-- Generate prediction metrics or directly forecast outcomes.
-
-- Visualize sentiment comparisons and trends.
-
-
-## 🔧 Features
-### ✔️ 1. Twitter Data Collection
-
-Collects tweets using keywords, hashtags, handles.
-
-Supports election-specific filters.
-
-Can use API v2 or scraping (depending on implementation).
-
-Logic:
-Identify relevant political entities → fetch real-time or historical tweets tied to those entities.
-
-### ✔️ 2. Preprocessing & Cleaning
-
-Removes URLs, mentions, RTs, emojis, special characters.
-
-Handles multilingual text (Bengali, Hindi, English).
-
-Removes stopwords & normalizes text.
-
-Logic:
-Ensures sentiment model receives clean, noise-free, uniform input.
-
-### ✔️ 3. Sentiment Analysis
-
-Classifies tweets into Positive / Negative / Neutral based on Lexicon approach
-
-Logic:
-Each tweet becomes a sentiment datapoint that reflects public opinion toward an entity.
-
-### ✔️ 4. Feature Engineering
-
-Extracted features:
-
-Sentiment Score
-
-Sentiment Ratio (Positive:Negative)
-
-Sentiment Volatility
-
-Trend slope
-
-Engagement Score
-
-Logic:
-Features become input for predictive models.
-
-### ✔️ 5. Prediction Module
-
-Uses ML/Statistical models
-
-Outputs:
-
-Win probability
-
-Sentiment-based ranking
-
-Constituency-wise comparison
-
-Logic:
-Sentiment features → ML model → Forecast.
-
-### 6. Visualization Dashboard
-
-Sentiment over time
-
-Party vs party volume and sentiment comparison
-
-Logic:
-Makes insights understandable and presentation-ready.
-
-## 🧠 System Architecture
-```mermaid
-flowchart TD
-    A[Tweet Collection] --> B[Preprocessing & Cleaning]
-    B --> C[Sentiment Analysis]
-    C --> D[Aggregation by Entity & Time]
-    D --> E[Feature Engineering]
-    E --> F[Prediction / Trend Analysis]
-    F --> G[Visualization & Reports]
-```
-
-## 🔄 Detailed Workflow (Modular Pipeline)
+## 👉 🏗 System Architecture
+The application follows a streamlined data processing pipeline, moving from raw data ingestion to visual analytics.
 ```mermaid
 graph TD
-    subgraph "Data_Ingestion"
-        A1[Tweet API / Scraper] --> A2[Store Raw Tweets]
-    end
-
-    subgraph "Preprocessing"
-        A2 --> B1[Clean Text]
-        B1 --> B2[Filter Irrelevant Tweets]
-        B2 --> B3[Handle Languages]
-    end
-
-    subgraph "Sentiment_Analysis"
-        B3 --> C1[Regressor]
-        C1 --> C2[Sentiment Score]
-    end
-
-    subgraph "Aggregation"
-        D2 --> E1[Group by Candidate/Party/Region]
-        E1 --> E2[Compute Time Series]
-    end
-
-    subgraph "Features"
-        E2 --> F1[Create Sentiment Features]
-    end
-
-    subgraph "Modeling"
-        F1 --> G1[Train Model]
-        G1 --> G2[Predict Outcome]
-    end
-
-    subgraph "Output"
-        G2 --> H1[Generate Reports]
-        H1 --> H2[Visualization Dashboard]
-    end
+    A[Start] --> B[Data Collection / User Upload CSV]
+    B --> C[Data Preprocessing]
+    C --> D[Sentiment Analysis]
+    D --> E[Data Aggregation]
+    E --> F{Analysis Mode}
+    F -->|Tweet Volume| G[Volume Comparison Graphs]
+    F -->|Sentiment Score| H[Regression Analysis & Correlation]
+    G --> I[Visualization Dashboard]
+    H --> I
+    I --> J[End]
 ```
 
-## 📊 Example Use Case: West Bengal Elections
+## 🧠 Methodology & Logic
+### The Algorithm -
+- **Data Collection:** The system accepts a CSV file containing political tweets. (Example datasets are provided in the data/ folder).
+Preprocessing:
+- **Stop Word Removal:** Filtering out common words (is, the, are) that carry no sentiment weight.
+Tokenization: Breaking tweets into individual words.
+- **Normalization:** Converting text to lowercase and removing special characters.
+- **Sentiment Analysis:**
+Uses Lexicon-based scoring (referencing Hu and Liu’s sentiment dictionary and AFINN-111).
+Tweets are classified as Positive, Negative, or Neutral.
+- **Regression Analysis:**
+Applies Linear or Polynomial Regression to model the relationship between the calculated Sentiment Score (X) and Vote Share (Y).
+Calculates the R-squared value to validate the strength of the correlation.
+### Mathematical Model -
+To quantify the overall sentiment for a political party, we use a specific weighted scoring formula. This formula emphasizes positive engagement while accounting for volume and negative feedback.
 
-Keywords: “TMC”, “BJP”, “INC”, “CPIM”, candidate names, Bengali-specific hashtags.
+$$P = (0.6 \times n_1) + (0.1 \times n) + (0.3 \times n_2)$$
 
-Collect tweets for 3–6 months.
+Where,
+$P$ = Overall Sentiment Score
+$n_1$ = Number of Positive tweets
+$n$ = Total number of tweets analyzed
+$n_2$ = Number of Negative tweets (calculated as $n - n_1$)
 
-Clean and preprocess multilingual text (English/Bengali).
+Note: The weights (0.6, 0.1, 0.3) prioritize positive sentiment (60%) but acknowledge that even negative publicity ($n_2$) and total noise ($n$) contribute to a party's visibility.
 
-Classify sentiment for each tweet.
+## ✨ Features
+- **📂 CSV Data Upload:** Users can upload their own Twitter datasets for custom analysis.
+- **📊 Dual Analysis Modes:**
+  - **Party Tweet Volume Analysis:** Visualizes the raw count of tweets over time for different parties (e.g., TMC, BJP, INC, CPIM).
+  - **Sentiment Analysis:** Generates sentiment scores and correlates them with actual vote shares.
+- **📈 Interactive Visualizations:**
+  - Line graphs for temporal volume trends.
+  - Scatter plots for regression analysis.
+- **🧮 Statistical Metrics:** Automatically calculates Regression Equations (Slope) and P-values.
+- **📱 Responsive Design:** Built with React.js for a seamless experience on mobile and desktop.
 
-Aggregate per party weekly.
+## 🛠 Tech Stack
+**Frontend:** React.js, Tailwind CSS, Recharts for visualization.
+**Backend:** Python
+**Data Processing:** Pandas, NumPy, Scikit-learn.
 
-Create time-series features.
+## ⚡ Getting Started
+To run this project locally, follow these steps:
 
-Predict seat-wise or overall trend.
-
-## 🛠️ Installation & Usage
-### 1. Clone the repository
-```git clone https://github.com/shrestha3103/election-prediction-using-sentiment-analysis
-cd election-prediction-using-sentiment-analysis
+### 1️⃣ Clone the repo
+```
+git clone [https://github.com/shrestha3103/electoral-result-prediction.git](https://github.com/shrestha3103/electoral-result-prediction.git)
+cd electoral-result-prediction
 ```
 
-### 2. Install dependencies
+### 2️⃣ Install Dependencies
 ```npm install```
 
-### 3. Setup environment variables
+### 3️⃣ Start Development Server
+```npm run start```
 
-Create .env:
 
-```TWITTER_API_KEY=xxxx
-TWITTER_API_SECRET=xxxx
-ACCESS_TOKEN=xxxx
-ACCESS_SECRET=xxxx
-```
+## 🖥 Usage Guide
+1. **Open the App:** Navigate to the live link or your local host.
+2. **Select Mode:** Choose between ***Party Tweet Volume*** or ***Sentiment Analysis*** via the radio buttons.
+3. **Upload Data:**
+   - Click the upload button and select your .csv file containing tweet data.
+   - Tip: Use the csv files provided in this repo to test.
+4. **View Results:**
+   - **Volume Graphs:** See how much people are talking about each party.
+   - **Correlation Curve:** Observe the prediction line $y = mx + c$ and see how well sentiment predicts votes.
 
-### 4. Run modules
+## 📉 Results & Analysis
+Our experimental results using historical data demonstrated a **strong positive correlation between social media sentiment and electoral performance.**
 
-```npm run collect       # Fetch tweets  
-npm run preprocess    # Clean data  
-npm run sentiment     # Run sentiment analysis  
-npm run aggregate     # Group and score data  
-npm run predict       # Run prediction  
-npm run visualize     # Generate charts
-```
+Regression Equation: $y = 4189.0295x + 180736.3719$
 
-## 📈 Outputs & Insights
-
-You will get:
-
-Sentiment trends for each party/candidate
-
-Comparative sentiment graphs
-
-Election prediction / probability estimate
-
-Analytical report & plots
+R-Squared Value: 73.94% (Indicating a strong relationship)
 
 ## 🔮 Future Enhancements
+- **Real-time Twitter API Integration:** Fetch live tweets instead of relying on CSV uploads. (paid)
+- **Multilingual Support:** Analyze tweets in regional languages (Hindi, Bengali, etc.).
+- **Deep Learning Models:** Implement LSTM or BERT for more nuanced sentiment detection (sarcasm detection).
+- **Geospatial Mapping:** Visualize sentiment hotspots on a map.
 
-Add Bengali/Hindi sentiment model for better accuracy in West Bengal.
-
-Build a React dashboard to visualize trends.
-
-Include bot detection to reduce noise.
-
-Integrate historical election data for stronger modeling performance.
-
-Add geolocation inference for constituency-level predictions.
-
-## 📚 References
-
-Twitter API documentation
-
-Research papers on election prediction using sentiment analysis
-
-### 🙋‍♀️ Author
-
-Shrestha Kundu
+## 📝 License
+Distributed under the MIT License. See LICENSE for more information.
+<p align="center">
+Made with ❤️ by Shrestha Kundu
+</p>

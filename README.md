@@ -64,8 +64,8 @@ Note: The weights (0.6, 0.1, 0.3) prioritize positive sentiment (60%) but acknow
 - **📱 Responsive Design:** Built with React.js for a seamless experience on mobile and desktop.
 
 ## 🛠 Tech Stack
-**Frontend:** React.js, Tailwind CSS, Recharts for visualization.
-**Backend:** Python
+**Frontend:** React.js, Tailwind CSS, Recharts for visualization<br>
+**Backend:** Python<br>
 **Data Processing:** Pandas, NumPy, Scikit-learn.
 
 ## ⚡ Getting Started
